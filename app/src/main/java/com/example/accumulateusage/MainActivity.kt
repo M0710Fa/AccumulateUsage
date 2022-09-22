@@ -19,10 +19,11 @@ import com.example.accumulateusage.ui.theme.MainScreen
 class MainActivity : ComponentActivity() {
     private val TAG = "MainActivity"
 
-    private var isUsageStatsPermissionGranted = checkUsageStatsPermission()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var isUsageStatsPermissionGranted = checkUsageStatsPermission()
+
         setContent {
             AccumulateUsageTheme {
                 // A surface container using the 'background' color from the theme
@@ -30,7 +31,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen()
+                    if(isUsageStatsPermissionGranted){
+                        MainScreen()
+                    }else{
+                        PermissionDemandScreen( { requestPermission() } )
+                    }
                 }
             }
         }

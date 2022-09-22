@@ -12,7 +12,7 @@ fun MainScreen(
 ) {
     Box() {
         Text(
-            text = "Hello!!",
+            text = "スマートフォンの使用履歴を記憶します",
             modifier = modifier.align(Alignment.Center)
         )
     }
