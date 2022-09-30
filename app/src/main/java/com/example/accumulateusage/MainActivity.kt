@@ -15,7 +15,9 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
 import com.example.accumulateusage.ui.theme.MainScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val TAG = "MainActivity"
 
@@ -33,9 +35,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     if(isUsageStatsPermissionGranted){
-                        MainScreen(
-                            { getUsage.getUsageStatsString() }
-                        )
+                        MainScreen()
                     }else{
                         PermissionDemandScreen( { requestPermission() } )
                     }
