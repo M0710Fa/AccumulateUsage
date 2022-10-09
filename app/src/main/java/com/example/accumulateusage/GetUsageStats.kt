@@ -4,7 +4,6 @@ import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import java.util.*
 
 class GetUsageStats(
@@ -20,8 +19,6 @@ class GetUsageStats(
 
     //UsageStatsオブジェクトの取得
     private fun getAppUsageStats(): MutableList<UsageStats> {
-        val app = AccumulateUsageApp()
-
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_YEAR, -30)
 

@@ -3,7 +3,6 @@ package com.example.accumulateusage.model.source.local
 import android.app.usage.UsageStats
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import com.example.accumulateusage.AccumulateUsageApp
 import java.io.BufferedReader
 import java.io.File
