@@ -25,8 +25,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val isUsageStatsPermissionGranted: Boolean = checkUsageStatsPermission()
+        val usage = GetUsageStats(this)
 
-        val getUsage = GetUsageStats(this)
         setContent {
             AccumulateUsageTheme {
                 // A surface container using the 'background' color from the theme
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     if(isUsageStatsPermissionGranted){
-                        MainScreen()
+                        MainScreen(usage)
                     }else{
                         PermissionDemandScreen( { requestPermission() } )
                     }
