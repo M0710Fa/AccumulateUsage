@@ -1,6 +1,9 @@
 package com.example.accumulateusage.ui.theme
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -15,9 +18,9 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    var usageHistory: String? by remember {
-        mutableStateOf(null)
-    }
+    val scroll = rememberScrollState(0)
+
+    val usageList by viewModel.usageList.collectAsState()
 
     Column() {
         Text(
@@ -29,10 +32,14 @@ fun MainScreen(
             Text(text = "GetUsage")
         }
         Button(onClick = {
-            usageHistory = viewModel.readUsage()
+            viewModel.readUsage()
         }) {
-            Text(text = "readUsage")
+            Text(text = "ReadUsage")
         }
-        Text(text = usageHistory?:"no data")
+        LazyColumn {
+            items(usageList){
+                Text(text = it)
+            }
+        }
     }
 }

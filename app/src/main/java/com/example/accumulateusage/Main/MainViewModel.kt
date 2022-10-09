@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.accumulateusage.GetUsageStats
 import com.example.accumulateusage.model.repository.UsageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,27 +16,33 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val usageRepository: UsageRepository
 ): ViewModel() {
+    private val fileName = "output.txt"
+
+    private var _usageList = MutableStateFlow<List<String>>(emptyList())
+    val usageList = _usageList.asStateFlow()
+
     fun saveUsageStats(usageStats: GetUsageStats) = viewModelScope.launch {
         val getUsageStats = usageStats.getUsageStats()
         try {
-            usageRepository.appendUsage("output.txt", getUsageStats)
+            usageRepository.appendUsage(fileName, getUsageStats)
             Log.i("mainViewModel", "Success Save Usage")
         }catch (e: Exception){
             Log.i("mainViewModel", "Failed Save Usage $e")
         }
     }
 
-    fun readUsage(): String? {
-        var result: String? = null
+    fun readUsage() {
         viewModelScope.launch {
             try {
-                result = usageRepository.getUsage("output.txt")
+                usageRepository.getUsage(fileName)?.collect{
+                    _usageList.value = it
+                }
                 Log.i("mainViewModel", "Success Read Usage")
             }catch (e: Exception){
                 Log.i("mainViewModel", "Failed Read Usage $e")
-                result = "error"
             }
         }
-        return result
     }
+
+
 }
