@@ -15,7 +15,9 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
 import com.example.accumulateusage.ui.theme.MainScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val TAG = "MainActivity"
 
@@ -23,8 +25,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val isUsageStatsPermissionGranted: Boolean = checkUsageStatsPermission()
+        val usage = GetUsageStats(this)
 
-        val getUsage = GetUsageStats(this)
         setContent {
             AccumulateUsageTheme {
                 // A surface container using the 'background' color from the theme
@@ -33,9 +35,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     if(isUsageStatsPermissionGranted){
-                        MainScreen(
-                            { getUsage.getUsageStatsString() }
-                        )
+                        MainScreen(usage)
                     }else{
                         PermissionDemandScreen( { requestPermission() } )
                     }
