@@ -1,5 +1,9 @@
 package com.example.accumulateusage
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,14 +14,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun PermissionDemandScreen(
-    openPermissionSetting: () -> Unit,
+    transitionMain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current as Activity
+
     Column(
         modifier = modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
@@ -31,14 +38,18 @@ fun PermissionDemandScreen(
             contentDescription = "UsagePermission",
             modifier = modifier.padding(24.dp)
         )
-
         Button(
             onClick = {
-                      openPermissionSetting()
+                requestPermission(context)
+                transitionMain()
                       }
         ) {
             Text(text = "設定を開く")
         }
     }
+}
+
+fun requestPermission(context: Context){
+    context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
 }
 

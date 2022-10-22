@@ -1,56 +1,28 @@
 package com.example.accumulateusage
 
 import android.app.AppOpsManager
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
-import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
-import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
-import com.example.accumulateusage.ui.theme.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val isUsageStatsPermissionGranted: Boolean = checkUsageStatsPermission()
-        val usage = GetUsageStats(this)
+        var startDestination = "main"
+
+        if(!isUsageStatsPermissionGranted){
+            startDestination = Destination.PermissionDemandScreen.route
+        }
 
         setContent {
-            AccumulateUsageTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    if(isUsageStatsPermissionGranted){
-                        MainScreen(usage)
-                    }else{
-                        PermissionDemandScreen( { requestPermission() } )
-                    }
-                }
-            }
-        }
-    }
-
-    private fun requestPermission(){
-        if(checkUsageStatsPermission()){
-            Log.i(TAG,"UsageStats Permission is Granted")
-        }else{
-            Log.i(TAG,"UsageStats Permission is NOT Granted")
-            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-
+            AppHost(startDestination = startDestination)
         }
     }
 
