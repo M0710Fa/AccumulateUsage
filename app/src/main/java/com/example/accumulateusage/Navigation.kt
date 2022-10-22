@@ -1,5 +1,8 @@
 package com.example.accumulateusage
 
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,7 +20,11 @@ fun AppHost(
     val navController = rememberNavController()
 
     AccumulateUsageTheme {
-        NavHost(navController = navController, startDestination = startDestination)
+        Surface(
+            modifier = Modifier.fillMaxHeight().fillMaxWidth()
+        ) {
+            NavHost(navController = navController, startDestination = startDestination)
+        }
     }
 }
 
@@ -32,11 +39,11 @@ fun NavHost(
         navController = navController,
         startDestination = startDestination
     ){
-        composable(route = "main"){
+        composable(route = Destination.MainScreen.route){
             MainScreen()
         }
-        composable(route = "permissionDemand"){
-            PermissionDemandScreen(transitionMain = {navController.navigate("main")})
+        composable(route = Destination.PermissionDemandScreen.route){
+            PermissionDemandScreen(transitionMain = {navController.navigate(Destination.MainScreen.route)})
         }
     }
 }

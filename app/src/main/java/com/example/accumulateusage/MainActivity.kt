@@ -1,19 +1,15 @@
 package com.example.accumulateusage
 
 import android.app.AppOpsManager
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
-import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,21 +18,11 @@ class MainActivity : ComponentActivity() {
         var startDestination = "main"
 
         if(!isUsageStatsPermissionGranted){
-            startDestination = "permissionDemand"
+            startDestination = Destination.PermissionDemandScreen.route
         }
 
         setContent {
             AppHost(startDestination = startDestination)
-        }
-    }
-
-    fun requestPermission(){
-        if(checkUsageStatsPermission()){
-            Log.i(TAG,"UsageStats Permission is Granted")
-        }else{
-            Log.i(TAG,"UsageStats Permission is NOT Granted")
-            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-
         }
     }
 
