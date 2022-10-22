@@ -9,12 +9,6 @@ import android.provider.Settings
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
-import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
-import com.example.accumulateusage.ui.theme.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,26 +19,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val isUsageStatsPermissionGranted: Boolean = checkUsageStatsPermission()
-        val usage = GetUsageStats(this)
+        var startDestination = "main"
+
+        if(!isUsageStatsPermissionGranted){
+            startDestination = "permissionDemand"
+        }
 
         setContent {
-            AccumulateUsageTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    if(isUsageStatsPermissionGranted){
-                        MainScreen(usage)
-                    }else{
-                        PermissionDemandScreen( { requestPermission() } )
-                    }
-                }
-            }
+            AppHost(startDestination = startDestination)
         }
     }
 
-    private fun requestPermission(){
+    fun requestPermission(){
         if(checkUsageStatsPermission()){
             Log.i(TAG,"UsageStats Permission is Granted")
         }else{

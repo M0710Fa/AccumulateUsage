@@ -6,11 +6,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
+import com.example.accumulateusage.ui.theme.MainScreen
+
 
 @Composable
-fun AccumulateUsageNavHost(
+fun AppHost(
+    startDestination: String
+){
+    val navController = rememberNavController()
+
+    AccumulateUsageTheme {
+        NavHost(navController = navController, startDestination = startDestination)
+    }
+}
+
+@Composable
+fun NavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     startDestination: String
 ){
     NavHost(
@@ -18,7 +32,11 @@ fun AccumulateUsageNavHost(
         navController = navController,
         startDestination = startDestination
     ){
-        composable("main"){
+        composable(route = "main"){
+            MainScreen()
+        }
+        composable(route = "permissionDemand"){
+            PermissionDemandScreen(transitionMain = {navController.navigate("main")})
         }
     }
 }
