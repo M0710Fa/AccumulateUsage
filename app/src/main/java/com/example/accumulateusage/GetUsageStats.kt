@@ -6,15 +6,15 @@ import android.content.Context
 import android.util.Log
 import java.util.*
 
+private const val TAG = "GetUsageStats"
+
 class GetUsageStats(
     private val context: Context
     ) {
-    private val TAG = "GetUsageStats"
 
     fun getUsageStats(): List<UsageStats>{
         Log.i(TAG,"Accessed GetUsageStatsClass")
-        return sortedUsageStatsString( getAppUsageStats())
-        //return sortedUsageStatsString( getAppUsageStats())
+        return sortedUsageStats( getAppUsageStats())
     }
 
     //UsageStatsオブジェクトの取得
@@ -32,7 +32,7 @@ class GetUsageStats(
         )
     }
 
-    private fun sortedUsageStatsString(usageStats: MutableList<UsageStats>): List<UsageStats> {
+    private fun sortedUsageStats(usageStats: MutableList<UsageStats>): List<UsageStats> {
         usageStats.sortWith(
             compareBy { it.lastTimeUsed }
         )
