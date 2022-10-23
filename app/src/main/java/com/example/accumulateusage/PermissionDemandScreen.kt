@@ -1,7 +1,6 @@
 package com.example.accumulateusage
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.Image
@@ -23,7 +22,7 @@ fun PermissionDemandScreen(
     transitionMain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current as Activity
+    val activity = LocalContext.current as Activity
 
     Column(
         modifier = modifier.fillMaxHeight(),
@@ -40,16 +39,16 @@ fun PermissionDemandScreen(
         )
         Button(
             onClick = {
-                requestPermission(context)
+                requestPermission(activity)
                 transitionMain()
-                      }
+            }
         ) {
             Text(text = "設定を開く")
         }
     }
 }
 
-fun requestPermission(context: Context){
-    context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+private fun requestPermission(activity: Activity){
+    activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
 }
 

@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
             appOpsManager.checkOpNoThrow("android:get_usage_stats", Process.myUid(), packageName)
         }
         return mode == AppOpsManager.MODE_ALLOWED
+
     }
 
 }
