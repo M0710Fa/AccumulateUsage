@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val isUsageStatsPermissionGranted: Boolean = checkUsageStatsPermission()
-        var startDestination = "main"
+        var startDestination = Destination.MainScreen.route
 
         if(!isUsageStatsPermissionGranted){
             startDestination = Destination.PermissionDemandScreen.route
