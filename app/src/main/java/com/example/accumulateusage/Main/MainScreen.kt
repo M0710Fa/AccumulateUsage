@@ -12,10 +12,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.accumulateusage.AccumulateUsageApp
-import com.example.accumulateusage.GetUsageStats
 import com.example.accumulateusage.Main.MainViewModel
 
 @Composable
@@ -23,6 +22,7 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val usageList by viewModel.usageList.collectAsState()
 
     Column(
@@ -37,11 +37,11 @@ fun MainScreen(
 
         Button(
             onClick = {
-                viewModel.saveUsageStats(GetUsageStats(context = AccumulateUsageApp.instance))
+                viewModel.setWorkManager(context = context)
             },
             modifier = modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "GetUsage")
+            Text(text = "Set Worker to Get Usage")
         }
         Button(
             onClick = {
