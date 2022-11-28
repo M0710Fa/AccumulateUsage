@@ -2,15 +2,19 @@ package com.example.accumulateusage.works
 
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.accumulateusage.GetUsageStats
 import com.example.accumulateusage.model.repository.UsageRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class GetUsageWorker(
-    appContext: Context,
-    params: WorkerParameters,
-    private val usageRepository: UsageRepository
+@HiltWorker
+class GetUsageWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted params: WorkerParameters,
+    private val usageRepository: UsageRepository,
 ): CoroutineWorker(appContext, params) {
     companion object {
         const val WORK_NAME = "com.example.accumulateusage.works.GetUsageWorker"
