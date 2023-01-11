@@ -2,6 +2,7 @@ package com.example.accumulateusage.Main
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -57,7 +58,6 @@ class MainViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.KEEP,
             request
         )
+        Toast.makeText(context, "Success set worker!", Toast.LENGTH_LONG).show()
     }
-
-
 }
