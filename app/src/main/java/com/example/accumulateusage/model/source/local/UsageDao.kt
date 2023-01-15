@@ -13,9 +13,15 @@ interface UsageDao {
     @Delete
     suspend fun delete(usage: Usage)
 
-    @Query("DELETE FROM usage_table")
+    @Query("DELETE FROM usages")
     suspend fun clear()
 
-    @Query("SELECT * FROM user_table WHERE id = :key")
+    @Query("SELECT * FROM usages WHERE id = :key")
     suspend fun get(key: Long): Usage?
+
+    @Query("SELECT * FROM usages")
+    suspend fun getAll(): List<Usage>?
+
+    @Insert
+    suspend fun insertUsages(usages: List<Usage>)
 }
