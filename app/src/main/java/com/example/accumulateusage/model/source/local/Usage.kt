@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "usage_table")
+@Entity(tableName = "usages")
 data class Usage(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
