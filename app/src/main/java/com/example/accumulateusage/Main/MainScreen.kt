@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.accumulateusage.Main.MainViewModel
@@ -26,7 +27,9 @@ fun MainScreen(
     val usageList by viewModel.usageList.collectAsState()
 
     Column(
-        modifier = modifier.fillMaxWidth().padding(16.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
         Text(
             text = "スマートフォンの使用履歴を記憶します",
