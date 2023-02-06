@@ -1,4 +1,4 @@
-package com.example.accumulateusage.Main
+package com.example.accumulateusage.ui.Main
 
 import android.content.Context
 import android.util.Log
