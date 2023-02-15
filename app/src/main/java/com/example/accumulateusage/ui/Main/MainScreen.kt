@@ -20,6 +20,7 @@ import com.example.accumulateusage.ui.Main.MainViewModel
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    transitionDebug: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -52,6 +53,15 @@ fun MainScreen(
             modifier = modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(text = "ReadUsage")
+        }
+
+        Button(
+            onClick = {
+                transitionDebug()
+            },
+            modifier = modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "デバッグ")
         }
 
         LazyColumn {
