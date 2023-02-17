@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.accumulateusage.ui.Debug.DebugScreen
 import com.example.accumulateusage.ui.theme.AccumulateUsageTheme
 import com.example.accumulateusage.ui.theme.MainScreen
 
@@ -21,7 +22,9 @@ fun AppHost(
 
     AccumulateUsageTheme {
         Surface(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth()
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
         ) {
             NavHost(navController = navController, startDestination = startDestination)
         }
@@ -40,10 +43,13 @@ fun NavHost(
         startDestination = startDestination
     ){
         composable(route = Destination.MainScreen.route){
-            MainScreen()
+            MainScreen(transitionDebug = {navController.navigate(Destination.DebugScreen.route)})
         }
         composable(route = Destination.PermissionDemandScreen.route){
             PermissionDemandScreen(transitionMain = {navController.navigate(Destination.MainScreen.route)})
+        }
+        composable(route = Destination.DebugScreen.route){
+            DebugScreen()
         }
     }
 }

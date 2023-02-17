@@ -15,18 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.accumulateusage.Main.MainViewModel
+import com.example.accumulateusage.ui.Main.MainViewModel
 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    transitionDebug: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val usageList by viewModel.usageList.collectAsState()
 
     Column(
-        modifier = modifier.fillMaxWidth().padding(16.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
         Text(
             text = "スマートフォンの使用履歴を記憶します",
@@ -50,6 +53,15 @@ fun MainScreen(
             modifier = modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(text = "ReadUsage")
+        }
+
+        Button(
+            onClick = {
+                transitionDebug()
+            },
+            modifier = modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "デバッグ")
         }
 
         LazyColumn {

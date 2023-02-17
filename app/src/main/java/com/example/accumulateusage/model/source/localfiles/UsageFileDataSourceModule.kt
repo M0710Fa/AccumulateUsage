@@ -1,4 +1,4 @@
-package com.example.accumulateusage.model.source.local
+package com.example.accumulateusage.model.source.localfiles
 
 import dagger.Module
 import dagger.Provides
