@@ -7,7 +7,7 @@ import com.example.accumulateusage.AccumulateUsageApp
 import java.io.BufferedReader
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class UsageFileDataSourceImpl @Inject constructor(
@@ -32,7 +32,8 @@ class UsageFileDataSourceImpl @Inject constructor(
     }
 
     override suspend fun appendUsage(fileName: String, usageStats: List<UsageStats>) {
-        var str = ""
+        var str = readFile(fileName)?:""
+
         usageStats.forEach {
             if (it.totalTimeInForeground.toInt() != 0) {
                 val date = Date(it.lastTimeUsed)
