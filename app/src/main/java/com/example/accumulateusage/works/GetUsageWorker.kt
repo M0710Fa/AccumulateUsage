@@ -20,13 +20,13 @@ class GetUsageWorker @AssistedInject constructor(
         const val WORK_NAME = "com.example.accumulateusage.works.GetUsageWorker"
     }
 
-    private val fileName = "data.txt"
+    private val fileName = "histories.txt"
     private val context = appContext
 
     override suspend fun doWork(): Result {
         try {
             Log.i("Worker","Work request for sync is run")
-            val usageStats = GetUsageStats(context).getUsageStats()
+            val usageStats = GetUsageStats(context).getUsagesOneDay()
             usageRepository.appendUsage(fileName, usageStats)
         }catch (e: Exception){
             Log.i("Worker","Error: $e")
