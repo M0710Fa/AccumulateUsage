@@ -22,7 +22,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val usageRepository: UsageRepository
 ): ViewModel() {
-    private val fileName = "output.txt"
+    private val fileName = "outer.txt"
 
     private var _usageList = MutableStateFlow<List<String>>(emptyList())
     val usageList = _usageList.asStateFlow()
@@ -50,8 +50,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getLatestUsage(context: Context){
+        viewModelScope.launch {
+            try{
+                val usages = GetUsageStats(context).getUsageStats()
+                usageRepository.appendUsage("iiii.txt", usages)
+                Log.i("mainViewModel", "Success get Usage")
+            }catch (e: Exception){
+                Log.i("mainViewModel", "Failed get Usage $e")
+            }
+        }
+    }
+
     fun setWorkManager(context: Context){
-        val request = PeriodicWorkRequestBuilder<GetUsageWorker>(24, TimeUnit.HOURS)
+        val request = PeriodicWorkRequestBuilder<GetUsageWorker>(15, TimeUnit.MINUTES)
             .build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             GetUsageWorker.WORK_NAME,
