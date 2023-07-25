@@ -11,4 +11,6 @@ interface UsageRepository {
     suspend fun getUsages(): Flow<List<Usage>>
 
     suspend fun addUsage(usage: Usage)
+
+    suspend fun saveUsage(usageStats: List<UsageStats>)
 }

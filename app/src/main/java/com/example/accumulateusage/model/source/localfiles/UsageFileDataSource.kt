@@ -5,4 +5,5 @@ import android.app.usage.UsageStats
 interface UsageFileDataSource {
     suspend fun readFile(fileName: String): String?
     suspend fun appendUsage(fileName: String, usageStats: List<UsageStats>)
+    suspend fun saveExternalStorage(fileName: String, usageStats: List<UsageStats>)
 }

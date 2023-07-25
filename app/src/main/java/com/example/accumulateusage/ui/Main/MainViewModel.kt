@@ -62,6 +62,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun saveUsage(context: Context){
+        viewModelScope.launch {
+            try{
+                val usages = GetUsageStats(context).getUsageStats()
+                usageRepository.saveUsage(usages)
+                Log.i("mainViewModel", "External")
+                Toast.makeText(context, "エクスポート完了", Toast.LENGTH_SHORT).show()
+            }catch (e: Exception){
+                Log.i("mainViewModel", "Failed External $e")
+                Toast.makeText(context, "エクスポート失敗", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     fun setWorkManager(context: Context){
         val request = PeriodicWorkRequestBuilder<GetUsageWorker>(15, TimeUnit.MINUTES)
             .build()
