@@ -44,4 +44,10 @@ class UsageRepositoryImpl @Inject constructor(
     override suspend fun addUsage(usage: Usage) {
         usageDao.insert(usage)
     }
+
+    override suspend fun saveUsage(usageStats: List<UsageStats>) {
+        val fileName = "usage_history.txt"
+        usageFileDataSource.saveExternalStorage(fileName, usageStats)
+    }
+
 }
