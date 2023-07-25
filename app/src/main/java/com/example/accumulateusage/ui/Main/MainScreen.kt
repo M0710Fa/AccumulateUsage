@@ -1,6 +1,7 @@
 package com.example.accumulateusage.ui.theme
 
 import android.Manifest
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,7 +31,6 @@ fun MainScreen(
 ) {
     val context = LocalContext.current
     val usageList by viewModel.usageList.collectAsState()
-    val externalStoragePermission = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     Column(
         modifier = modifier
@@ -76,13 +76,16 @@ fun MainScreen(
                 Text(text = it)
             }
         }
-        Column() {
-            if(externalStoragePermission.status.isGranted){
-                Text(text = "ストレージへのアクセス権限設定済み")
-            }else {
-                Text(text = "ストレージへのアクセス権限が必要です")
-                Button(onClick = { externalStoragePermission.launchPermissionRequest() }) {
-                    Text(text = "権限を設定")
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
+            Column() {
+                val externalStoragePermission = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if(externalStoragePermission.status.isGranted){
+                    Text(text = "ストレージへのアクセス権限設定済み")
+                }else {
+                    Text(text = "ストレージへのアクセス権限が必要です")
+                    Button(onClick = { externalStoragePermission.launchPermissionRequest() }) {
+                        Text(text = "権限を設定")
+                    }
                 }
             }
         }
