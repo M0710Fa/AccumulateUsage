@@ -103,4 +103,6 @@ dependencies {
 
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+
+    implementation "com.google.accompanist:accompanist-permissions:0.25.1"
 }
