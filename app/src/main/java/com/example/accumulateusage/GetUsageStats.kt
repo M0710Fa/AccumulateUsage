@@ -25,7 +25,7 @@ class GetUsageStats(
     //UsageStatsオブジェクトの取得
     private fun getAppUsageStats(): MutableList<UsageStats> {
         val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -100)
+        cal.add(Calendar.MONTH, -2)
 
         // usageStatsManagerのオブジェクトの取得
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
