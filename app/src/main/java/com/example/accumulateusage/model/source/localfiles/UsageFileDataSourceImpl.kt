@@ -32,7 +32,7 @@ class UsageFileDataSourceImpl @Inject constructor(
     }
 
     override suspend fun appendUsage(fileName: String, usageStats: List<UsageStats>) {
-        var str = readFile(fileName)?:""
+        var str = ""
 
         usageStats.forEach {
             if (it.totalTimeInForeground.toInt() != 0) {
@@ -45,7 +45,7 @@ class UsageFileDataSourceImpl @Inject constructor(
         }
 
         val openFile by lazy {
-            AccumulateUsageApp.instance.openFileOutput(fileName, Context.MODE_PRIVATE)
+            AccumulateUsageApp.instance.openFileOutput(fileName, Context.MODE_PRIVATE or Context.MODE_APPEND)
         }
 
         openFile.use {

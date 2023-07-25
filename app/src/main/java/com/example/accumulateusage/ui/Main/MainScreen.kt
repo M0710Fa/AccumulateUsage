@@ -44,25 +44,17 @@ fun MainScreen(
             },
             modifier = modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "Set Worker to Get Usage")
+            Text(text = "定期収集を開始する")
         }
         Button(
             onClick = {
-                viewModel.readUsage()
+                viewModel.getLatestUsage(context)
             },
             modifier = modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "ReadUsage")
+            Text(text = "使用履歴をエクスポート")
         }
 
-        Button(
-            onClick = {
-                transitionDebug()
-            },
-            modifier = modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "デバッグ")
-        }
 
         LazyColumn {
             items(usageList){
