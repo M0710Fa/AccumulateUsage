@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.accumulateusage.GetUsageStats
 import com.example.accumulateusage.model.repository.UsageRepository
@@ -26,6 +27,9 @@ class MainViewModel @Inject constructor(
 
     private var _usageList = MutableStateFlow<List<String>>(emptyList())
     val usageList = _usageList.asStateFlow()
+
+    private var _workerState = MutableStateFlow<Boolean>(false)
+    val workerState = _workerState.asStateFlow()
 
     fun saveUsageStats(usageStats: GetUsageStats) = viewModelScope.launch {
         val getUsageStats = usageStats.getUsageStats()
@@ -84,6 +88,30 @@ class MainViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.KEEP,
             request
         )
-        Toast.makeText(context, "Success set worker!", Toast.LENGTH_LONG).show()
+        Log.d("worker", "Set WorkManager")
+    }
+
+    fun cancelWorkManager(context: Context){
+        WorkManager.getInstance(context).cancelUniqueWork(GetUsageWorker.WORK_NAME)
+        Log.d("worker", "Cancel WorkManager")
+    }
+
+    fun checkWorkerState(context: Context){
+        val works = WorkManager.getInstance(context).getWorkInfosForUniqueWork(GetUsageWorker.WORK_NAME).get()
+        Log.d("チェック", works.toString())
+        works.map {
+            val status = it.state
+            _workerState.value = status == WorkInfo.State.ENQUEUED || status == WorkInfo.State.RUNNING
+        }
+    }
+
+    fun toggleWorker(context: Context):String {
+        if(_workerState.value){
+            cancelWorkManager(context)
+            return "履歴収集を停止しました"
+        }else{
+            setWorkManager(context)
+            return "履歴収集を開始します"
+        }
     }
 }

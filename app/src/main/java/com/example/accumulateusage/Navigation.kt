@@ -2,8 +2,10 @@ package com.example.accumulateusage
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -37,13 +39,14 @@ fun NavHost(
     navController: NavHostController,
     startDestination: String
 ){
+    val snackbarHostState = remember{ SnackbarHostState() }
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ){
         composable(route = Destination.MainScreen.route){
-            MainScreen(transitionDebug = {navController.navigate(Destination.DebugScreen.route)})
+            MainScreen(transitionDebug = {navController.navigate(Destination.DebugScreen.route)}, snackbarHostState = snackbarHostState)
         }
         composable(route = Destination.PermissionDemandScreen.route){
             PermissionDemandScreen(transitionMain = {navController.navigate(Destination.MainScreen.route)})
