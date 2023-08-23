@@ -17,7 +17,7 @@ class GetUsageWorker @AssistedInject constructor(
     private val usageRepository: UsageRepository,
 ): CoroutineWorker(appContext, params) {
     companion object {
-        const val WORK_NAME = "com.example.accumulateusage.works.GetUsageWorker"
+        const val WORK_NAME = "Periodic Usage Collect"
     }
 
     private val fileName = "histories.txt"

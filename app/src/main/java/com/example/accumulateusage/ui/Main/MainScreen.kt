@@ -2,73 +2,165 @@ package com.example.accumulateusage.ui.theme
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.accumulateusage.ui.Main.MainViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     transitionDebug: () -> Unit = {},
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val usageList by viewModel.usageList.collectAsState()
+    val workerFlag by viewModel.workerState.collectAsState()
+    val scope = rememberCoroutineScope()
+
+
+    LaunchedEffect(true){
+        viewModel.checkWorkerState(context)
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        SnackbarHost(hostState = snackbarHostState)
+    }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .padding(16.dp)
     ) {
-        
         Text(
-            text = "スマートフォンの使用履歴を記憶します",
+            text = "Accumulate Usage",
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(8.dp)
+                .padding(vertical = 16.dp),
+            style = Typography.h5,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = "定期収集",
+            modifier = modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colors.primary
         )
 
-        Button(
-            onClick = {
-                viewModel.setWorkManager(context = context)
-            },
-            modifier = modifier.align(Alignment.CenterHorizontally)
+        Row(
+            modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "定期収集を開始する")
+            Column(
+                modifier = modifier
+            ) {
+                Text(text = "使用履歴の定期収集")
+                Text(
+                    text = "1日に一度，アプリの使用履歴を収集し保存します．",
+                    style = Typography.caption,
+                    )
+            }
+
+            Switch(checked = workerFlag, onCheckedChange = {
+                scope.launch {
+                    val str = viewModel.toggleWorker(context)
+                    viewModel.checkWorkerState(context)
+                    snackbarHostState.showSnackbar(message = str, actionLabel = null, duration = SnackbarDuration.Short)
+                }
+            })
         }
-        Button(
+
+        Text(
+            text = "直近の履歴の収集",
+            modifier = modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colors.primary
+        )
+
+        SettingContent(
+            modifier = modifier.fillMaxWidth(),
+            title = "使用履歴の保存",
+            description = "OSから最新の使用履歴を取得し保存します．",
             onClick = {
                 viewModel.getLatestUsage(context)
-            },
-            modifier = modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "使用履歴の保存")
-        }
-        Button(
+            }
+        )
+
+        SettingContent(
+            modifier = modifier.fillMaxWidth(),
+            title = "使用履歴をエクスポート",
+            description = "保存された使用履歴をDocumentsにエクスポートします．",
             onClick = {
                 viewModel.saveUsage(context)
-            },
-            modifier = modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "使用履歴をエクスポート")
-        }
+            }
+        )
+
+//        Button(
+//            onClick = {
+//                viewModel.checkWorkerState(context = context)
+//            },
+//            modifier = modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(text = "チェック")
+//        }
+//
+//        Button(
+//            onClick = {
+//                viewModel.setWorkManager(context = context)
+//            },
+//            modifier = modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(text = "定期収集を開始する")
+//        }
+//        Button(
+//            onClick = {
+//                viewModel.getLatestUsage(context)
+//            },
+//            modifier = modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(text = "使用履歴の保存")
+//        }
+//
+//        Button(
+//            onClick = {
+//                viewModel.saveUsage(context)
+//            },
+//            modifier = modifier.align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(text = "使用履歴をエクスポート")
+//        }
 
 
         LazyColumn {
@@ -89,5 +181,28 @@ fun MainScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SettingContent(
+    modifier: Modifier = Modifier.fillMaxSize(),
+    title:String,
+    description:String = "",
+    onClick:() -> Unit = {},
+) {
+    Column(
+        modifier = modifier
+            .clickable {
+                onClick()
+            }
+            .padding(vertical =12.dp)
+    ) {
+        Text(text = title)
+        Text(
+            text = description,
+            style = Typography.caption,
+
+        )
     }
 }
