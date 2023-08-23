@@ -42,7 +42,7 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     transitionDebug: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier.fillMaxWidth()
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val usageList by viewModel.usageList.collectAsState()
@@ -62,7 +62,7 @@ fun MainScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier = modifier.fillMaxWidth()
             .padding(16.dp)
     ) {
         Text(
@@ -74,20 +74,26 @@ fun MainScreen(
             textAlign = TextAlign.Center
         )
         Text(
-            text = "設定",
-            modifier = modifier
-                .align(Alignment.CenterHorizontally),
+            text = "定期収集",
+            modifier = modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colors.primary
         )
 
         Row(
-            modifier = modifier.padding(vertical = 8.dp),
+            modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "使用履歴の定期収集"
-            )
+            Column(
+                modifier = modifier
+            ) {
+                Text(text = "使用履歴の定期収集")
+                Text(
+                    text = "1日に一度，アプリの使用履歴を収集し保存します．",
+                    style = Typography.caption,
+                    )
+            }
+
             Switch(checked = workerFlag, onCheckedChange = {
                 scope.launch {
                     val str = viewModel.toggleWorker(context)
@@ -97,8 +103,14 @@ fun MainScreen(
             })
         }
 
+        Text(
+            text = "直近の履歴の収集",
+            modifier = modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colors.primary
+        )
+
         SettingContent(
-            modifier = modifier.align(Alignment.CenterHorizontally),
+            modifier = modifier.fillMaxWidth(),
             title = "使用履歴の保存",
             description = "OSから最新の使用履歴を取得し保存します．",
             onClick = {
@@ -107,7 +119,7 @@ fun MainScreen(
         )
 
         SettingContent(
-            modifier = modifier.align(Alignment.CenterHorizontally),
+            modifier = modifier.fillMaxWidth(),
             title = "使用履歴をエクスポート",
             description = "保存された使用履歴をDocumentsにエクスポートします．",
             onClick = {
