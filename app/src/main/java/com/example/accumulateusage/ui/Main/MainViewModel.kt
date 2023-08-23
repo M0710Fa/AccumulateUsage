@@ -81,7 +81,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun setWorkManager(context: Context){
-        val request = PeriodicWorkRequestBuilder<GetUsageWorker>(15, TimeUnit.MINUTES)
+        val request = PeriodicWorkRequestBuilder<GetUsageWorker>(24, TimeUnit.HOURS)
             .build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             GetUsageWorker.WORK_NAME,
